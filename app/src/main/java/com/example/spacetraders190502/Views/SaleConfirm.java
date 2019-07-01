@@ -10,24 +10,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.spacetraders190502.Model.CurrentItem;
 import com.example.spacetraders190502.R;
 
-public class PurchaseConfirm extends AppCompatActivity {
+public class SaleConfirm extends AppCompatActivity {
 
     CurrentItem currentItem = BuyItem.getCurrentItem();
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_purchase);
+        setContentView(R.layout.activity_sale);
     }
 
     public void yes(View view) {
-        ConfigurationActivity.getNewPlayer().buy(BuyItem.currentItem.getItem());
-        Toast.makeText(PurchaseConfirm.this, "Bought " + currentItem.getItem().getName(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(PurchaseConfirm.this, BuyItem.class);
+        ConfigurationActivity.getNewPlayer().sell(SellItem.currentItem.getItem());
+        Toast.makeText(SaleConfirm.this, "Sold " + currentItem.getItem().getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SaleConfirm.this, SellItem.class);
         startActivity(intent);
     }
 
     public void no(View view) {
-        Intent intent = new Intent(PurchaseConfirm.this, BuyItem.class);
+        Intent intent = new Intent(SaleConfirm.this, SellItem.class);
         startActivity(intent);
     }
 }

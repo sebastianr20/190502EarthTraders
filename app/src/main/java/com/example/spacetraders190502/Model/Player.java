@@ -127,9 +127,7 @@ public class Player {
     }
 
     //the buying process
-    public boolean buy(int goodOrder) {
-        String s = GoodsList.getNameByOrder(goodOrder);
-        GoodsList good = GoodsList.valueOf(s.toUpperCase());
+    public boolean buy(GoodsList good) {
         if (canBuy(good) == false) {
             return false;
         } else {
@@ -156,11 +154,10 @@ public class Player {
 
 
     //the selling process
-    public boolean sell(String goodie) {
-        GoodsList goods = GoodsList.valueOf(goodie);
-        this.setCreditScore(creditScore += goods.getPrice());
-        goods.setQuantity(goods.getQuantity() - 1);
-        playerGoods.remove(goods);
+    public boolean sell(GoodsList good) {
+        this.setCreditScore(creditScore += good.getPrice());
+        good.setQuantity(good.getQuantity() - 1);
+        playerGoods.remove(good);
         return true;
 
 

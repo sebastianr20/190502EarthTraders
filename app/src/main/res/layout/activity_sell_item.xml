@@ -5,74 +5,73 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.spacetraders190502.Views.BuyItem"
-    android:id="@+id/layout">
+    tools:context="com.example.spacetraders190502.Views.SellItem">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:text="Tap an item to purchase it." />
+        android:layout_marginTop="24dp"
+        android:text="Tap an item to sell it." />
 
     <TextView
         android:id="@+id/creditScoreDisplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="61dp" />
 
     <TextView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-         />
+        />
 
     <TextView
         android:id="@+id/cargoSpaceDisplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
          />
 
     <Button
         android:id="@+id/select_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:onClick="onSelect"
-        android:text="Select Item Below" />
+        android:text="Select ITem" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/item_spinner"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="20dp"/>
 
 
     <TextView
         android:id="@+id/selectedInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         />
 
     <Button
-        android:id="@+id/buy_button"
+        android:id="@+id/sell_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:onClick="onBuy"
-        android:text="Buy" />
+        android:layout_marginTop="20dp"
+        android:onClick="onSell"
+        android:text="Sell" />
+
     <Button
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:onClick="back"
         android:text="Back" />
-
 
 </LinearLayout>

@@ -36,7 +36,10 @@ public class BuyItem extends AppCompatActivity {
     private List<Object> itemList = new ArrayList<Object>();
     public TextView creditScoreTV;
     public TextView cargoSpaceTV;
+    public TextView display;
     public static CurrentItem currentItem;
+    public TextView selectedInfo;
+    public Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +47,38 @@ public class BuyItem extends AppCompatActivity {
         setContentView(R.layout.activity_buy_item);
 
         creditScoreTV = findViewById(R.id.creditScoreDisplay);
+        selectedInfo = findViewById(R.id.selectedInfo);
         cargoSpaceTV = findViewById(R.id.cargoSpaceDisplay);
+        display = findViewById(R.id.list);
         Log.d(TAG, "onCreate: started.");
         updateInfo();
 
 
         for (GoodsList item: list) {
-            if (item.getMtlp().getOrder() >= RegionActivity.getCurrCity().techLevel.getOrder()) {
+            if (item.getMtlp().getOrder() <= RegionActivity.getCurrCity().techLevel.getOrder()) {
                 this.setPriceItem(item);
                 itemList.add(item);
             }
         }
 
-        Spinner spinner = (Spinner) findViewById(R.id.item_spinner);
+        if (itemList.size() == 0) {
+            Intent intent = new Intent(BuyItem.this, CannotBuy.class);
+            startActivity(intent);
+        }
+        String dispMessage = "Available Items:";
+        for (Object item: itemList) {
+            dispMessage += "\n" + ((GoodsList) item).getName() + "     Price: " + ((GoodsList) item).getPrice();
+        }
+        display.setText(dispMessage);
+
+        spinner = (Spinner) findViewById(R.id.item_spinner);
         ArrayAdapter<Object> dataAdapter = new ArrayAdapter<Object>(this, android.R.layout.simple_spinner_item, itemList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
         GoodsList chosen = GoodsList.valueOf(spinner.getSelectedItem().toString().toUpperCase());
-        currentItem = new CurrentItem(chosen.getOrder());
+        currentItem = new CurrentItem(chosen);
         currentItem.setItem(chosen);
+        selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -75,11 +91,11 @@ public class BuyItem extends AppCompatActivity {
     }
 
     public void onBuy(View view) {
-        if (newPlayer.canBuy(currentItem.getItem().getOrder())) {
+        if (newPlayer.canBuy(currentItem.getItem())) {
             Intent intent = new Intent(BuyItem.this, PurchaseConfirm.class);
             startActivity(intent);
         } else {
-            Toast.makeText(BuyItem.this, "Cannot buy " + ConfigurationActivity.getNewPlayer().getItemName(currentItem.getItem().getOrder()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(BuyItem.this, "Cannot buy " + currentItem.getItem().getName(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -104,5 +120,17 @@ public class BuyItem extends AppCompatActivity {
 
     public static CurrentItem getCurrentItem() {
         return currentItem;
+    }
+
+    public void back(View view) {
+        Intent intent = new Intent(BuyItem.this, MarketPlaceActivity.class);
+        startActivity(intent);
+    }
+
+    public void onSelect(View view) {
+        GoodsList chosen = GoodsList.valueOf(spinner.getSelectedItem().toString().toUpperCase());
+        currentItem = new CurrentItem(chosen);
+        currentItem.setItem(chosen);
+        selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
     }
 }
