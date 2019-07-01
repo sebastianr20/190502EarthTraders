@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Space Traders."
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter your name."
+        android:layout_marginTop="4dp"/>
+
+    <EditText
+         android:id="@+id/input_name"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:inputType="textPersonName"
+         android:text="Name"
+         android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Allocate your skill points. (Must add up to 16 max)"
+        android:layout_marginTop="4dp"/>
+
+    <EditText
+        android:id="@+id/pilot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Pilot"
+        android:layout_marginTop="4dp"/>
+
+    <EditText
+        android:id="@+id/fighter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Fighter"
+        android:layout_marginTop="4dp"/>
+    <EditText
+        android:id="@+id/trader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Trader"
+        android:layout_marginTop="4dp"/>
+    <EditText
+        android:id="@+id/engineer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Engineer"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose your difficulty."
+        android:layout_marginTop="4dp"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/difficulty_spinner"
+        android:layout_marginTop="4dp"/>
+
+    <Button
+        android:text="Start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_button"
+        android:layout_marginTop="4dp"
+        android:onClick="onStartPressed" />
+
+    <Button
+        android:text="Close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close_button"
+        android:layout_marginTop="4dp"
+        android:onClick="onClosePressed" />
+
+</LinearLayout>
