@@ -58,9 +58,15 @@ public class SellItem extends AppCompatActivity {
             Intent intent = new Intent(SellItem.this, CannotSell.class);
             startActivity(intent);
         }
+        int count = 0;
         String dispMessage = "Available Items:";
         for (Object item: itemList) {
-            dispMessage += "\n" + ((GoodsList) item).getName() + "     Price: " + ((GoodsList) item).getPrice();
+            count += 1;
+            if (count % 2 == 0) {
+                dispMessage += "\t" + ((GoodsList) item).getName() + "     Price: " + ((GoodsList) item).getPrice();
+            } else {
+                dispMessage += "\n" + ((GoodsList) item).getName() + "     Price: " + ((GoodsList) item).getPrice();
+            }
         }
         display.setText(dispMessage);
 
