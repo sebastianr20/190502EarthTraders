@@ -6,79 +6,103 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.spacetraders190502.Model.CurrentItem;
+import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
 
-import java.util.ArrayList;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BuyItem extends AppCompatActivity {
 
     private static final String TAG = "BuyItem";
+    public Player newPlayer = ConfigurationActivity.getNewPlayer();
 
     //vars
-    private static ArrayList<GoodsList> itemNames = new ArrayList<>();
-    private static ArrayList<Integer> itemPrices = new ArrayList<>();
-
+    private static GoodsList[] list = GoodsList.values();
+    private List<Object> itemList = new ArrayList<Object>();
+    public TextView creditScoreTV;
+    public TextView cargoSpaceTV;
+    public static CurrentItem currentItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_item);
+
+        creditScoreTV = findViewById(R.id.creditScoreDisplay);
+        cargoSpaceTV = findViewById(R.id.cargoSpaceDisplay);
         Log.d(TAG, "onCreate: started.");
         updateInfo();
-        initItems();
+
+
+        for (GoodsList item: list) {
+            if (item.getMtlp().getOrder() >= RegionActivity.getCurrCity().techLevel.getOrder()) {
+                this.setPriceItem(item);
+                itemList.add(item);
+            }
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.item_spinner);
+        ArrayAdapter<Object> dataAdapter = new ArrayAdapter<Object>(this, android.R.layout.simple_spinner_item, itemList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+        GoodsList chosen = GoodsList.valueOf(spinner.getSelectedItem().toString().toUpperCase());
+        currentItem = new CurrentItem(chosen.getOrder());
+        currentItem.setItem(chosen);
     }
 
-    private void initItems() {
-        Log.d(TAG, "initItems, preparing.");
-        for (GoodsList item : GoodsList.values()) {
-            if (RegionActivity.getCurrCity().techLevel.getOrder() == item.getMtlp().getOrder()) {
-                Random r = new Random();
-                int sign;
-                if (r.nextBoolean()) {
-                    sign = 1;
-                } else {
-                    sign = -1;
-                }
-                itemNames.add(item);
-                item.setPrice(item.getBase() + (item.getIpl() * (RegionActivity.getCurrCity().techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
-                itemPrices.add(item.getPrice());
-                Button b = new Button(this);
-                b.setId(item.getOrder());
-                b.setText("Item: " + item.getName() + "\nPrice: " + item.getPrice());
-                b.setId(item.getOrder());
-                LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
-                layout.addView(b);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (ConfigurationActivity.getNewPlayer().buy(view.getId())) {
-                            Toast.makeText(BuyItem.this, "Bought " + ConfigurationActivity.getNewPlayer().getItemName(view.getId()), Toast.LENGTH_SHORT);
-                        } else {
-                            Toast.makeText(BuyItem.this, "Cannot buy " + ConfigurationActivity.getNewPlayer().getItemName(view.getId()), Toast.LENGTH_SHORT);
-                        }
-                        Intent intent = new Intent(BuyItem.this, BuyItem.class);
-                        startActivity(intent);
-                    }
-                });
-            }
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0) {
+        String item = "Select an Item";
+    }
+
+    public void onBuy(View view) {
+        if (newPlayer.canBuy(currentItem.getItem().getOrder())) {
+            Intent intent = new Intent(BuyItem.this, PurchaseConfirm.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(BuyItem.this, "Cannot buy " + ConfigurationActivity.getNewPlayer().getItemName(currentItem.getItem().getOrder()), Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void setPriceItem(GoodsList item) {
+        int sign = this.getSign();
+        item.setPrice(item.getBase() + (item.getIpl() * (RegionActivity.getCurrCity().techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
+    }
+
+    private int getSign() {
+        Random r = new Random();
+        if (r.nextBoolean()) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 
     public void updateInfo() {
-        //creditScore
-        TextView creditScoreTV = findViewById(R.id.creditScoreDisplay);
-        creditScoreTV.setText("Your credit score is: " + ConfigurationActivity.getNewPlayer().getCreditScore());
-        //cargo space
-        TextView cargoSpaceTV = findViewById(R.id.cargoSpaceDisplay);
-        cargoSpaceTV.setText("Remaining cargo space is: " + (20 - ConfigurationActivity.getNewPlayer().getPlayerGoods().size()));
+        creditScoreTV.setText("Your credit score is: " + newPlayer.getCreditScore());
+        cargoSpaceTV.setText("Remaining cargo space is: " + (20 - newPlayer.getPlayerGoods().size()));
+    }
+
+    public static CurrentItem getCurrentItem() {
+        return currentItem;
     }
 }

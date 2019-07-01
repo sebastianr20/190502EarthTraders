@@ -11,6 +11,6 @@ public class Cities {
         this.techLevels = new TechLevel[]{TechLevel.Agriculture, TechLevel.Medieval, TechLevel.Renaissance, TechLevel.PreAgriculture, TechLevel.HiTech, TechLevel.PostIndustrial, TechLevel.Industrial, TechLevel.HiTech, TechLevel.Renaissance, TechLevel.Agriculture};
         this.xs = new int[]{0, 10, 50, 100, 45, 92, 74, 103, 134, 96};
         this.ys = new int[]{0, 10, 50, 64, 32, 87, 47, 120, 21, 11};
-        this.ress = new Resources[]{Resources.LIFELESS, Resources.DESERT, Resources.MINERALRICH, Resources.WEIRDMUSHROOMS, Resources.POORSOIL, Resources.LOTSOFWATER, Resources.RICHFAUNA, Resources.LOTSOFHERBS, Resources.WARLIKE};
+        this.ress = new Resources[]{Resources.LIFELESS, Resources.DESERT, Resources.MINERALRICH, Resources.WEIRDMUSHROOMS, Resources.POORSOIL, Resources.ARTISTIC, Resources.LOTSOFWATER, Resources.RICHFAUNA, Resources.LOTSOFHERBS, Resources.WARLIKE};
     }
 }

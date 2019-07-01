@@ -30,5 +30,19 @@
         android:layout_marginTop="20dp"
         android:layout_alignTop="@+id/creditScoreDisplay" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_spinner"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/buy_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="onBuy"
+        android:text="Buy" />
+
 
 </LinearLayout>

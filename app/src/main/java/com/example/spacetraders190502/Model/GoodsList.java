@@ -69,7 +69,7 @@ public enum GoodsList {
             case 9:
                 return "Robots";
         }
-    return null;
+    return "poop";
     }
     public int getOrder() {
         return order;
@@ -191,6 +191,10 @@ public enum GoodsList {
 
     public int getPrice() {
         return price;
+    }
+
+    public String toString() {
+        return name;
     }
 
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.spacetraders190502.Views.PurchaseConfirm"
+    android:id="@+id/layout">>
+
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Are you sure you want to purchase?" />
+
+    <Button
+        android:id="@+id/yes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="yes"
+        android:text="Yes" />
+
+    <Button
+        android:id="@+id/no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="no"
+        android:text="No" />
+</LinearLayout>

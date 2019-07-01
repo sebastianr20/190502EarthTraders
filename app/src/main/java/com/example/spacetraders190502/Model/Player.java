@@ -96,13 +96,23 @@ public class Player {
     }
 
     //can buy
+    public boolean canBuy(int goodOrder) {
+        String s = GoodsList.getNameByOrder(goodOrder);
+        GoodsList good = GoodsList.valueOf(s.toUpperCase());
+        if (playerGoods.size() + 1 > 20) {
+            return false;
+        } else if (this.getCreditScore() < good.getPrice()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     public boolean canBuy(GoodsList good) {
         if (playerGoods.size() + 1 > 20) {
             return false;
         } else if (this.getCreditScore() < good.getPrice()) {
             return false;
-        } else
-        {
+        } else {
             return true;
         }
     }
@@ -119,7 +129,7 @@ public class Player {
     //the buying process
     public boolean buy(int goodOrder) {
         String s = GoodsList.getNameByOrder(goodOrder);
-        GoodsList good = GoodsList.valueOf(s);
+        GoodsList good = GoodsList.valueOf(s.toUpperCase());
         if (canBuy(good) == false) {
             return false;
         } else {
