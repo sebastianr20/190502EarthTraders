@@ -10,26 +10,25 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="230dp"
-        android:layout_height="21dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="24dp"
         android:text="Tap an item to purchase it." />
 
     <TextView
         android:id="@+id/creditScoreDisplay"
-        android:layout_width="87dp"
-        android:layout_height="51dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="61dp"
-        android:text="wghgth" />
+        android:layout_marginTop="61dp" />
 
     <TextView
         android:id="@+id/cargoSpaceDisplay"
-        android:layout_width="77dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/creditScoreDisplay"
-        android:text="ehethheteh" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_alignTop="@+id/creditScoreDisplay" />
 
 
 </LinearLayout>

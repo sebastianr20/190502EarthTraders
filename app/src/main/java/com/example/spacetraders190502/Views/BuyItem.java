@@ -1,5 +1,6 @@
 package com.example.spacetraders190502.Views;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
@@ -57,7 +59,13 @@ public class BuyItem extends AppCompatActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ConfigurationActivity.getNewPlayer().buy(view.getId());
+                        if (ConfigurationActivity.getNewPlayer().buy(view.getId())) {
+                            Toast.makeText(BuyItem.this, "Bought " + ConfigurationActivity.getNewPlayer().getItemName(view.getId()), Toast.LENGTH_SHORT);
+                        } else {
+                            Toast.makeText(BuyItem.this, "Cannot buy " + ConfigurationActivity.getNewPlayer().getItemName(view.getId()), Toast.LENGTH_SHORT);
+                        }
+                        Intent intent = new Intent(BuyItem.this, BuyItem.class);
+                        startActivity(intent);
                     }
                 });
             }

@@ -130,6 +130,10 @@ public class Player {
         return true;
     }
 
+    public String getItemName(int order) {
+        return GoodsList.getNameByOrder(order);
+    }
+
     public void addToPlayerGoods(String good) {
         playerGoods.add(GoodsList.valueOf(good));
     }
