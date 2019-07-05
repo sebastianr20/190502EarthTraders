@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.spacetraders190502.Views.TravelActivity">
+
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select where you would like to travel."
+        android:layout_marginTop="4dp"/>
+    <TextView
+        android:id="@+id/fuel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="fuel."
+        android:layout_marginTop="4dp"/>
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="location."
+        android:layout_marginTop="1dp"/>
+
+    <Button
+        android:id="@+id/newdelhi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="newdelhi"
+        android:text="New Delhi"
+        android:layout_marginTop="4dp"/>
+    <Button
+        android:id="@+id/bangkok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="bangkok"
+        android:text="Bangkok"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/newyork"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="newyork"
+        android:text="New York City"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/amsterdam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Amsterdam"
+        android:onClick="amsterdam"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/rome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="rome"
+        android:text="Rome"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/athens"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="athens"
+        android:text="Athens"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/johannesburg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="johannesburg"
+        android:text="Johannesburg"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/bogota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="bogota"
+        android:text="Bogota"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/cairo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cairo"
+        android:text="Cairo"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/sydney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="sydney"
+        android:text="Sydney"
+        android:layout_marginTop="0dp"/>
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onBack"
+        android:text="Back"
+        android:layout_marginTop="1dp"/>
+</LinearLayout>

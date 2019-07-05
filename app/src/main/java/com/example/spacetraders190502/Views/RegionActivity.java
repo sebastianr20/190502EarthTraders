@@ -24,29 +24,37 @@ public class RegionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_region);
+        Intent intent = getIntent();
+        int n1 = Integer.parseInt(intent.getStringExtra("message"));
+        if (n1 < 0) {
+            Log.i("Universe created", "We created a universe");
+            List<Object> list = new ArrayList<>();
+            list.add(Region.NEWDELHI);
+            list.add(Region.BANGKOK);
+            list.add(Region.NEWYORK);
+            list.add(Region.AMSTERDAM);
+            list.add(Region.ROME);
+            list.add(Region.ATHENS);
+            list.add(Region.JOHANNESBURG);
+            list.add(Region.BOGOTA);
+            list.add(Region.CAIRO);
+            list.add(Region.SYDNEY);
 
+            Random rand = new Random();
 
-        Log.i("Universe created", "We created a universe");
-        List<Object> list = new ArrayList<>();
-        list.add(Region.NEWDELHI);
-        list.add(Region.BANGKOK);
-        list.add(Region.NEWYORK);
-        list.add(Region.AMSTERDAM);
-        list.add(Region.ROME);
-        list.add(Region.ATHENS);
-        list.add(Region.JOHANNESBURG);
-        list.add(Region.BOGOTA);
-        list.add(Region.CAIRO);
-        list.add(Region.SYDNEY);
+            int n = rand.nextInt(10);
 
-        Random rand = new Random();
+            currCity = new CurrentCity(n);
 
-        int n = rand.nextInt(10);
+            TextView welcome = (TextView) findViewById(R.id.welcome);
+            welcome.setText("Welcome to " + currCity.name + "!");
+        } else {
 
-        currCity = new CurrentCity(n);
+            currCity = new CurrentCity(n1);
 
-        TextView welcome = (TextView) findViewById(R.id.welcome);
-        welcome.setText("Welcome to " + currCity.name + "!");
+            TextView welcome = (TextView) findViewById(R.id.welcome);
+            welcome.setText("Welcome to " + currCity.name + "!");
+        }
 
     }
     public void toMarketPlace(View view) {

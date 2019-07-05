@@ -132,6 +132,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         }
         Intent intent = new Intent(this, RegionActivity.class);
+        intent.putExtra("message", "-1");
         startActivity(intent);
     }
     public static Player getNewPlayer() {

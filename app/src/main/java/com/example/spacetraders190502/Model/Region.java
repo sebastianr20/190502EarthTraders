@@ -28,6 +28,17 @@ public enum Region {
         Log.i("Region Created", this.toString());
     }
 
+    public String getName() {
+        return this.name;
+    }
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
     @Override
     public String toString() {
         String s = String.format("Name: %s\nx: %d, y: %d\nTechlevel: %s\nResources: %s\n", name, x, y, techLevel.toString(), res.toString());
