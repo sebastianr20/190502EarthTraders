@@ -27,7 +27,8 @@ public class MarketPlaceActivity extends AppCompatActivity {
         TextView mkp = (TextView) findViewById(R.id.marketplace);
         mkp.setText("Welcome to " + currentCity.name + " Market Place!");
         fuel = (TextView) findViewById(R.id.fuel);
-        fuel.setText("Current Fuel Capacity: " + newPlayer.getSpaceship().getFuelcapacity() + "%");
+        String message = "Current Fuel Capacity: " + newPlayer.getSpaceship().getFuelcapacity() + "%";
+        fuel.setText(message);
     }
 
     public void goToBuy(View v) {
