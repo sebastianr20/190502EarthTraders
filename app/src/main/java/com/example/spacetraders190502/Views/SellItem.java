@@ -14,27 +14,28 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import com.google.gson.Gson;
 
 import com.example.spacetraders190502.Model.CurrentCity;
 import com.example.spacetraders190502.Model.CurrentItem;
+import com.example.spacetraders190502.Model.Login;
 import com.example.spacetraders190502.Model.Player;
-import com.example.spacetraders190502.Model.SaveState;
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
 
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class SellItem extends AppCompatActivity {
-    public SaveState saveState = new SaveState();
-    public Player newPlayer = saveState.getSavedPlayer();
-    public CurrentCity city = saveState.getSavedCity();
+
     private static final String TAG = "SellItem";
     private List<Object> itemList = new ArrayList<Object>();
-    public ArrayList<GoodsList> list = newPlayer.getPlayerGoods();
+    public ArrayList<GoodsList> list;
     public TextView creditScoreTV;
     public TextView cargoSpaceTV;
     public Spinner spinner;
@@ -42,10 +43,40 @@ public class SellItem extends AppCompatActivity {
     public static CurrentItem currentItem;
     public TextView selectedInfo;
 
+    public Player newPlayer = ConfigurationActivity.getNewPlayer();
+    CurrentCity currentCity = RegionActivity.getCurrCity();
+    Login login = new Login("poop", "ooop");
+    public Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_item);
+
+        gson = new Gson();
+
+
+        File path = getApplicationContext().getFilesDir();
+        File file = new File(path, "Login.json");
+        try {
+            login = new Login("poop", "ooop");
+            int length = (int) file.length();
+            byte[] bytes = new byte[length];
+            FileInputStream in = new FileInputStream(file);
+            in.read(bytes);
+            String contents = new String(bytes);
+            in.close();
+            Log.d("FileFromLastInstance", contents);
+            if (!contents.equals("")) {
+                System.out.println("in if");
+                login = gson.fromJson(contents, Login.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        newPlayer = login.getPlayer();
+        currentCity = login.getCity();
+        list = newPlayer.getPlayerGoods();
 
         creditScoreTV = findViewById(R.id.creditScoreDisplay);
         selectedInfo = findViewById(R.id.selectedInfo);
@@ -102,7 +133,7 @@ public class SellItem extends AppCompatActivity {
     }
     private void setPriceItem(GoodsList item) {
         int sign = this.getSign();
-        item.setPrice(item.getBase() + (item.getIpl() * (city.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
+        item.setPrice(item.getBase() + (item.getIpl() * (currentCity.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
     }
 
     private int getSign() {
@@ -119,7 +150,6 @@ public class SellItem extends AppCompatActivity {
     }
 
     public void back(View view) {
-        saveGame();
         Intent intent = new Intent(SellItem.this, MarketPlaceActivity.class);
         startActivity(intent);
     }
@@ -128,10 +158,5 @@ public class SellItem extends AppCompatActivity {
         currentItem = new CurrentItem(chosen);
         currentItem.setItem(chosen);
         selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
-    }
-
-    public void saveGame() {
-        saveState.writePlayer(newPlayer);
-        saveState.writeCity(city);
     }
 }

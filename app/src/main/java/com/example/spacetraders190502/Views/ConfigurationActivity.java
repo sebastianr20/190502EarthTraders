@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,17 +12,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spacetraders190502.Model.Difficulty;
+import com.example.spacetraders190502.Model.Login;
 import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.R;
+import com.google.gson.Gson;
 
 public class ConfigurationActivity extends AppCompatActivity {
     public static Player newPlayer;
+    public Gson gson;
+    public Login login = new Login("poop", "ooop");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +132,38 @@ public class ConfigurationActivity extends AppCompatActivity {
                     Toast.makeText(ConfigurationActivity.this, "Skill Distribution Error!", Toast.LENGTH_SHORT).show();
                 } else {
                     newPlayer = new Player(name, pilot, fighter, trader, engineer, diffLevel);
+                    gson = new Gson();
+
+                    File path = getApplicationContext().getFilesDir();
+                    File file = new File(path, "Login.json");
+                    try {
+                        int length = (int) file.length();
+                        byte[] bytes = new byte[length];
+                        FileInputStream in = new FileInputStream(file);
+                        in.read(bytes);
+                        String contents = new String(bytes);
+                        in.close();
+                        Log.d("FileFromLastInstance", contents);
+                        if (!contents.equals("")) {
+                            login = gson.fromJson(contents, Login.class);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    login.setPlayer(newPlayer);
+                    String json = gson.toJson(login);
+                    Log.d("Current File", json);
+
+                    path = getApplicationContext().getFilesDir();
+                    file = new File(path, "Login.json");
+
+                    try {
+                        FileOutputStream stream = new FileOutputStream(file);
+                        stream.write(json.getBytes());
+                        stream.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     Toast.makeText(ConfigurationActivity.this, newPlayer.toString(), Toast.LENGTH_LONG).show();
                     newPlayer.toString();
                 }
@@ -137,10 +177,6 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
     public static Player getNewPlayer() {
         return newPlayer;
-    }
-
-    public static void setNewPlayer(Player newPlayer1) {
-        newPlayer = newPlayer1;
     }
 
     public void onClosePressed(View view) {

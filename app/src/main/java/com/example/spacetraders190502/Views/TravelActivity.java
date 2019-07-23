@@ -2,6 +2,7 @@ package com.example.spacetraders190502.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
@@ -10,21 +11,53 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spacetraders190502.Model.CurrentCity;
+import com.example.spacetraders190502.Model.Login;
 import com.example.spacetraders190502.Model.Player;
+import com.example.spacetraders190502.Model.RandomEvent;
 import com.example.spacetraders190502.Model.Region;
 import com.example.spacetraders190502.R;
+import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TravelActivity extends AppCompatActivity {
     public Player newPlayer = ConfigurationActivity.getNewPlayer();
     CurrentCity currentCity = RegionActivity.getCurrCity();
+    Login login = new Login("poop", "ooop");
+    public Gson gson;
     public int maxTravelDistance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel);
+
+        gson = new Gson();
+
+
+        File path = getApplicationContext().getFilesDir();
+        File file = new File(path, "Login.json");
+        try {
+            login = new Login("poop", "ooop");
+            int length = (int) file.length();
+            byte[] bytes = new byte[length];
+            FileInputStream in = new FileInputStream(file);
+            in.read(bytes);
+            String contents = new String(bytes);
+            in.close();
+            Log.d("FileFromLastInstance", contents);
+            if (!contents.equals("")) {
+                System.out.println("in if");
+                login = gson.fromJson(contents, Login.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        newPlayer = login.getPlayer();
+        currentCity = login.getCity();
 
         TextView fuel = (TextView) findViewById(R.id.fuel);
         TextView location = (TextView) findViewById(R.id.location);
@@ -69,7 +102,7 @@ public class TravelActivity extends AppCompatActivity {
         int count = 0;
         for (Button b: list) {
             Region r = (Region) listR.get(count);
-            if (r.getName() == currentCity.name) {
+            if (r.getName().equals(currentCity.name)) {
                 b.setText(r.getName() + " : You are here");
             } else if (canTravel(r)) {
                 b.setText(r.getName() + " : Enough fuel");
@@ -85,6 +118,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.NEWDELHI);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "0");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -95,6 +129,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.BANGKOK);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "1");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -105,6 +140,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.NEWYORK);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "2");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -115,6 +151,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.AMSTERDAM);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "3");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -125,6 +162,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.ROME);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "4");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -135,6 +173,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.ATHENS);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "5");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -145,6 +184,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.JOHANNESBURG);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "6");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -155,6 +195,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.BOGOTA);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "7");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -165,6 +206,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.CAIRO);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "8");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -175,6 +217,7 @@ public class TravelActivity extends AppCompatActivity {
             updateFuel(Region.SYDNEY);
             Intent intent = new Intent(this, RegionActivity.class);
             intent.putExtra("message", "9");
+            randomEvent();
             startActivity(intent);
         } else {
             Toast.makeText(TravelActivity.this, "Not enough fuel!", Toast.LENGTH_SHORT).show();
@@ -190,7 +233,7 @@ public class TravelActivity extends AppCompatActivity {
         if (distance == 0) {
             return false;
         }
-        return distance < newPlayer.getSpaceship().getFueldistance();
+        return distance < maxTravelDistance;
     }
     private void updateFuel(Region region) {
         int x = currentCity.x;
@@ -200,10 +243,30 @@ public class TravelActivity extends AppCompatActivity {
         double distance = Math.sqrt(Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2));
         newPlayer.getSpaceship().setFueldistance(maxTravelDistance - (int) distance);
         newPlayer.getSpaceship().setFuelcapacity(newPlayer.getSpaceship().getFueldistance() * 2);
+        login.setPlayer(newPlayer);
+        String json = gson.toJson(login);
+        Log.d("Current File", json);
+
+        File path = getApplicationContext().getFilesDir();
+        File file = new File(path, "Login.json");
+
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(json.getBytes());
+            stream.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void onBack(View view) {
         Intent intent = new Intent(TravelActivity.this, MarketPlaceActivity.class);
         startActivity(intent);
+    }
+
+    private void randomEvent() {
+        RandomEvent event = RandomEvent.eventGen();
+        String message = event.toString();
+        Toast.makeText(TravelActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

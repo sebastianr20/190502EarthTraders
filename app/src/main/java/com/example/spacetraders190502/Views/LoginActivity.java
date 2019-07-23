@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.spacetraders190502.Model.CurrentCity;
+import com.example.spacetraders190502.Model.SaveState;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private Login savedLogin;
     private String savedUser;
     private String savedPass;
+    private SaveState saveState;
     private CurrentCity savedCity;
     private int savedOrdinal;
     private Player savedPlayer;
@@ -63,41 +65,8 @@ public class LoginActivity extends AppCompatActivity {
                 savedLogin = gson.fromJson(contents, Login.class);
                 savedUser = savedLogin.getUsername();
                 savedPass = savedLogin.getPassword();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        path = getApplicationContext().getFilesDir();
-        file = new File(path, "Player.json");
-        try {
-            int length = (int) file.length();
-            byte[] bytes = new byte[length];
-            FileInputStream in = new FileInputStream(file);
-            in.read(bytes);
-            String contents = new String(bytes);
-            in.close();
-            Log.d("FileFromLastInstance", contents);
-            if (!contents.equals("")) {
-                savedPlayer = gson.fromJson(contents, Player.class);
-                ConfigurationActivity.setNewPlayer(savedPlayer);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        path = getApplicationContext().getFilesDir();
-        file = new File(path, "City.json");
-        try {
-            int length = (int) file.length();
-            byte[] bytes = new byte[length];
-            FileInputStream in = new FileInputStream(file);
-            in.read(bytes);
-            String contents = new String(bytes);
-            in.close();
-            Log.d("FileFromLastInstance", contents);
-            if (!contents.equals("")) {
-                savedCity = gson.fromJson(contents, CurrentCity.class);
+                savedCity = savedLogin.getCity();
+                savedPlayer = savedLogin.getPlayer();
                 savedOrdinal = savedCity.getOrdinal();
             }
         } catch (Exception e) {
@@ -109,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onLogin(View view) {
         cred1 = username.getText().toString();
         cred2 = password.getText().toString();
-        System.out.println(cred1 + cred2);
         if (savedUser == null && savedPass == null) {
             if (cred1 == "") {
                 Toast.makeText(LoginActivity.this, "Username Field Not Complete", Toast.LENGTH_SHORT).show();

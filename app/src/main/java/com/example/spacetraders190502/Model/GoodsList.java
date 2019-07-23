@@ -46,7 +46,7 @@ public enum GoodsList {
         this.name = name;
     }
 
-   public static String getNameByOrder(int order) {
+    public static String getNameByOrder(int order) {
         switch (order) {
             case 0:
                 return "Water";
@@ -69,7 +69,7 @@ public enum GoodsList {
             case 9:
                 return "Robots";
         }
-    return "poop";
+        return "poop";
     }
     public int getOrder() {
         return order;

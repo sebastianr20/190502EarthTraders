@@ -15,25 +15,28 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.spacetraders190502.Model.CurrentItem;
-import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.Model.CurrentCity;
-import com.example.spacetraders190502.Model.SaveState;
+import com.example.spacetraders190502.Model.CurrentItem;
+import com.example.spacetraders190502.Model.Login;
+import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
+import com.google.gson.Gson;
 
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class BuyItem extends AppCompatActivity {
-    SaveState saveState = new SaveState();
 
     private static final String TAG = "BuyItem";
-    public Player newPlayer = saveState.getSavedPlayer();
-    public CurrentCity city = saveState.getSavedCity();
+    public Player newPlayer = ConfigurationActivity.getNewPlayer();
+    CurrentCity currentCity = RegionActivity.getCurrCity();
+    Login login = new Login("poop", "ooop");
 
     //vars
     private static GoodsList[] list = GoodsList.values();
@@ -44,11 +47,36 @@ public class BuyItem extends AppCompatActivity {
     public static CurrentItem currentItem;
     public TextView selectedInfo;
     public Spinner spinner;
+    public Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_item);
+
+        gson = new Gson();
+
+
+        File path = getApplicationContext().getFilesDir();
+        File file = new File(path, "Login.json");
+        try {
+            login = new Login("poop", "ooop");
+            int length = (int) file.length();
+            byte[] bytes = new byte[length];
+            FileInputStream in = new FileInputStream(file);
+            in.read(bytes);
+            String contents = new String(bytes);
+            in.close();
+            Log.d("FileFromLastInstance", contents);
+            if (!contents.equals("")) {
+                System.out.println("in if");
+                login = gson.fromJson(contents, Login.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        newPlayer = login.getPlayer();
+        currentCity = login.getCity();
 
         creditScoreTV = findViewById(R.id.creditScoreDisplay);
         selectedInfo = findViewById(R.id.selectedInfo);
@@ -59,7 +87,7 @@ public class BuyItem extends AppCompatActivity {
 
 
         for (GoodsList item: list) {
-            if (item.getMtlp().getOrder() <= city.techLevel.getOrder()) {
+            if (item.getMtlp().getOrder() <= currentCity.techLevel.getOrder()) {
                 this.setPriceItem(item);
                 itemList.add(item);
             }
@@ -105,7 +133,7 @@ public class BuyItem extends AppCompatActivity {
 
     private void setPriceItem(GoodsList item) {
         int sign = this.getSign();
-        item.setPrice(item.getBase() + (item.getIpl() * (city.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
+        item.setPrice(item.getBase() + (item.getIpl() * (currentCity.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
     }
 
     private int getSign() {
@@ -127,7 +155,6 @@ public class BuyItem extends AppCompatActivity {
     }
 
     public void back(View view) {
-        saveGame();
         Intent intent = new Intent(BuyItem.this, MarketPlaceActivity.class);
         startActivity(intent);
     }
@@ -137,10 +164,5 @@ public class BuyItem extends AppCompatActivity {
         currentItem = new CurrentItem(chosen);
         currentItem.setItem(chosen);
         selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
-    }
-
-    public void saveGame() {
-        saveState.writePlayer(newPlayer);
-        saveState.writeCity(city);
     }
 }

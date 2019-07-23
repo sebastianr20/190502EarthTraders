@@ -163,4 +163,7 @@ public class Player {
 
 
     }
+    public void setCurrShip(Spaceship ship) {
+        currShip = ship;
+    }
 }

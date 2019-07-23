@@ -7,34 +7,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
 import com.example.spacetraders190502.Model.CurrentCity;
-import com.example.spacetraders190502.Model.Player;
+import com.example.spacetraders190502.Model.Login;
 import com.example.spacetraders190502.Model.Region;
-import com.example.spacetraders190502.Model.SaveState;
+import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.R;
 import com.google.gson.Gson;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RegionActivity extends AppCompatActivity {
-    public SaveState saveState;
     public static CurrentCity currCity;
-    private Gson gson;
+    public static Player newPlayer;
+    public Gson gson;
+    public Login login = new Login("poop", "ooop");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_region);
-        gson = new Gson();
         Intent intent = getIntent();
         int n1 = Integer.parseInt(intent.getStringExtra("message"));
         if (n1 < 0) {
@@ -50,28 +48,88 @@ public class RegionActivity extends AppCompatActivity {
             list.add(Region.BOGOTA);
             list.add(Region.CAIRO);
             list.add(Region.SYDNEY);
+            currCity = new CurrentCity(0);
+            newPlayer = ConfigurationActivity.getNewPlayer();
 
-            Random rand = new Random();
+            gson = new Gson();
 
-            int n = rand.nextInt(10);
+            File path = getApplicationContext().getFilesDir();
+            File file = new File(path, "Login.json");
+            try {
+                int length = (int) file.length();
+                byte[] bytes = new byte[length];
+                FileInputStream in = new FileInputStream(file);
+                in.read(bytes);
+                String contents = new String(bytes);
+                in.close();
+                Log.d("FileFromLastInstance", contents);
+                if (!contents.equals("")) {
+                    login = gson.fromJson(contents, Login.class);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            login.setPlayer(newPlayer);
+            String json = gson.toJson(login);
+            Log.d("Current File", json);
 
-            currCity = new CurrentCity(n);
+            path = getApplicationContext().getFilesDir();
+            file = new File(path, "Login.json");
+
+            try {
+                FileOutputStream stream = new FileOutputStream(file);
+                stream.write(json.getBytes());
+                stream.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             TextView welcome = (TextView) findViewById(R.id.welcome);
             welcome.setText("Welcome to " + currCity.name + "!");
         } else {
-            makePlayerCity();
-            saveState = new SaveState();
 
-            currCity = saveState.getSavedCity();
+            currCity = new CurrentCity(n1);
 
             TextView welcome = (TextView) findViewById(R.id.welcome);
             welcome.setText("Welcome to " + currCity.name + "!");
         }
+        newPlayer = ConfigurationActivity.getNewPlayer();
 
+        gson = new Gson();
+
+        File path = getApplicationContext().getFilesDir();
+        File file = new File(path, "Login.json");
+        try {
+            int length = (int) file.length();
+            byte[] bytes = new byte[length];
+            FileInputStream in = new FileInputStream(file);
+            in.read(bytes);
+            String contents = new String(bytes);
+            in.close();
+            Log.d("FileFromLastInstance", contents);
+            if (!contents.equals("")) {
+                login = gson.fromJson(contents, Login.class);
+                newPlayer = login.getPlayer();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        login.setCity(currCity);
+        String json = gson.toJson(login);
+        Log.d("Current File", json);
+
+        path = getApplicationContext().getFilesDir();
+        file = new File(path, "Login.json");
+
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(json.getBytes());
+            stream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public void toMarketPlace(View view) {
-        saveGame();
         Intent intent = new Intent(this, MarketPlaceActivity.class);
         startActivity(intent);
     }
@@ -80,52 +138,18 @@ public class RegionActivity extends AppCompatActivity {
     }
 
     public void onSave(View view) {
-        CurrentCity saveCity = currCity;
-        Player savePlayer = ConfigurationActivity.getNewPlayer();
-        String jsonCity = gson.toJson(saveCity);
-        String jsonPlayer = gson.toJson(savePlayer);
+        String json = gson.toJson(login);
+        Log.d("Current File", json);
 
         File path = getApplicationContext().getFilesDir();
-        File fileCity = new File(path, "City.json");
-        File filePlayer = new File(path, "Player.json");
+        File file = new File(path, "Login.json");
+
         try {
-            FileOutputStream stream = new FileOutputStream(fileCity);
-            stream.write(jsonCity.getBytes());
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(json.getBytes());
             stream.close();
-            FileOutputStream stream2 = new FileOutputStream(filePlayer);
-            stream2.write(jsonPlayer.getBytes());
-            stream2.close();
-            Toast.makeText(RegionActivity.this, "Saved Game!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(RegionActivity.this, "Error while saving Game.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void makePlayerCity() {
-        CurrentCity saveCity = currCity;
-        Player savePlayer = ConfigurationActivity.getNewPlayer();
-        String jsonCity = gson.toJson(saveCity);
-        String jsonPlayer = gson.toJson(savePlayer);
-
-        File path = getApplicationContext().getFilesDir();
-        File fileCity = new File(path, "City.json");
-        File filePlayer = new File(path, "Player.json");
-        try {
-            FileOutputStream stream = new FileOutputStream(fileCity);
-            stream.write(jsonCity.getBytes());
-            stream.close();
-            FileOutputStream stream2 = new FileOutputStream(filePlayer);
-            stream2.write(jsonPlayer.getBytes());
-            stream2.close();
-            Toast.makeText(RegionActivity.this, "Saved Game!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(RegionActivity.this, "Error while saving Game.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void saveGame() {
-        saveState.saveGame(ConfigurationActivity.getNewPlayer(), currCity);
     }
 }
