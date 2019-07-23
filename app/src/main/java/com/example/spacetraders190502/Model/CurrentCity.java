@@ -10,7 +10,7 @@ public class CurrentCity {
     Cities c = new Cities();
 
     public CurrentCity(int ordinal) {
-
+        this.ordinal = ordinal;
         this.name = c.names[ordinal];
         this.x = c.xs[ordinal];
         this.y = c.ys[ordinal];
@@ -28,5 +28,9 @@ public class CurrentCity {
             return false;
         }
         return distance < ship.getFueldistance();
+    }
+
+    public int getOrdinal() {
+        return ordinal;
     }
 }

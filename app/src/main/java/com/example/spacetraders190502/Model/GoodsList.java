@@ -160,8 +160,9 @@ public enum GoodsList {
     public boolean canSell(TechLevel soltech) {
         if (soltech.compareTo(mtlp) >= 0) {
             return true;
-        } else{
+        } else {
             return false;
+        }
     }
 
     public int calculateQuantity(TechLevel soltech, int size, Resources resource) {

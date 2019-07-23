@@ -139,6 +139,10 @@ public class ConfigurationActivity extends AppCompatActivity {
         return newPlayer;
     }
 
+    public static void setNewPlayer(Player newPlayer1) {
+        newPlayer = newPlayer1;
+    }
+
     public void onClosePressed(View view) {
         finish();
     }

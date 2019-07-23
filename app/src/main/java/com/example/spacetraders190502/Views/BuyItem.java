@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.spacetraders190502.Model.CurrentItem;
 import com.example.spacetraders190502.Model.Player;
+import com.example.spacetraders190502.Model.CurrentCity;
+import com.example.spacetraders190502.Model.SaveState;
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
 
@@ -27,9 +29,11 @@ import java.util.List;
 import java.util.Random;
 
 public class BuyItem extends AppCompatActivity {
+    SaveState saveState = new SaveState();
 
     private static final String TAG = "BuyItem";
-    public Player newPlayer = ConfigurationActivity.getNewPlayer();
+    public Player newPlayer = saveState.getSavedPlayer();
+    public CurrentCity city = saveState.getSavedCity();
 
     //vars
     private static GoodsList[] list = GoodsList.values();
@@ -55,7 +59,7 @@ public class BuyItem extends AppCompatActivity {
 
 
         for (GoodsList item: list) {
-            if (item.getMtlp().getOrder() <= RegionActivity.getCurrCity().techLevel.getOrder()) {
+            if (item.getMtlp().getOrder() <= city.techLevel.getOrder()) {
                 this.setPriceItem(item);
                 itemList.add(item);
             }
@@ -101,7 +105,7 @@ public class BuyItem extends AppCompatActivity {
 
     private void setPriceItem(GoodsList item) {
         int sign = this.getSign();
-        item.setPrice(item.getBase() + (item.getIpl() * (RegionActivity.getCurrCity().techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
+        item.setPrice(item.getBase() + (item.getIpl() * (city.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
     }
 
     private int getSign() {
@@ -123,6 +127,7 @@ public class BuyItem extends AppCompatActivity {
     }
 
     public void back(View view) {
+        saveGame();
         Intent intent = new Intent(BuyItem.this, MarketPlaceActivity.class);
         startActivity(intent);
     }
@@ -132,5 +137,10 @@ public class BuyItem extends AppCompatActivity {
         currentItem = new CurrentItem(chosen);
         currentItem.setItem(chosen);
         selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
+    }
+
+    public void saveGame() {
+        saveState.writePlayer(newPlayer);
+        saveState.writeCity(city);
     }
 }

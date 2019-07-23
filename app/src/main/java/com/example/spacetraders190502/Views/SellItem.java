@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.spacetraders190502.Model.CurrentCity;
 import com.example.spacetraders190502.Model.CurrentItem;
 import com.example.spacetraders190502.Model.Player;
+import com.example.spacetraders190502.Model.SaveState;
 import com.example.spacetraders190502.R;
 import com.example.spacetraders190502.Model.GoodsList;
 
@@ -27,9 +29,10 @@ import java.util.List;
 import java.util.Random;
 
 public class SellItem extends AppCompatActivity {
-
+    public SaveState saveState = new SaveState();
+    public Player newPlayer = saveState.getSavedPlayer();
+    public CurrentCity city = saveState.getSavedCity();
     private static final String TAG = "SellItem";
-    public Player newPlayer = ConfigurationActivity.getNewPlayer();
     private List<Object> itemList = new ArrayList<Object>();
     public ArrayList<GoodsList> list = newPlayer.getPlayerGoods();
     public TextView creditScoreTV;
@@ -99,7 +102,7 @@ public class SellItem extends AppCompatActivity {
     }
     private void setPriceItem(GoodsList item) {
         int sign = this.getSign();
-        item.setPrice(item.getBase() + (item.getIpl() * (RegionActivity.getCurrCity().techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
+        item.setPrice(item.getBase() + (item.getIpl() * (city.techLevel.getOrder() - item.getMtlp().getOrder()) + (item.getVar() * sign)));
     }
 
     private int getSign() {
@@ -116,6 +119,7 @@ public class SellItem extends AppCompatActivity {
     }
 
     public void back(View view) {
+        saveGame();
         Intent intent = new Intent(SellItem.this, MarketPlaceActivity.class);
         startActivity(intent);
     }
@@ -124,5 +128,10 @@ public class SellItem extends AppCompatActivity {
         currentItem = new CurrentItem(chosen);
         currentItem.setItem(chosen);
         selectedInfo.setText("Selected Item: " + currentItem.getItem().getName() + "\nPrice: " + currentItem.getItem().getPrice());
+    }
+
+    public void saveGame() {
+        saveState.writePlayer(newPlayer);
+        saveState.writeCity(city);
     }
 }

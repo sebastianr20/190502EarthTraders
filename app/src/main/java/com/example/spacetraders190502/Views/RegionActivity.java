@@ -7,23 +7,34 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 import com.example.spacetraders190502.Model.CurrentCity;
+import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.Model.Region;
+import com.example.spacetraders190502.Model.SaveState;
 import com.example.spacetraders190502.R;
+import com.google.gson.Gson;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RegionActivity extends AppCompatActivity {
+    public SaveState saveState;
     public static CurrentCity currCity;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_region);
+        gson = new Gson();
         Intent intent = getIntent();
         int n1 = Integer.parseInt(intent.getStringExtra("message"));
         if (n1 < 0) {
@@ -49,8 +60,10 @@ public class RegionActivity extends AppCompatActivity {
             TextView welcome = (TextView) findViewById(R.id.welcome);
             welcome.setText("Welcome to " + currCity.name + "!");
         } else {
+            makePlayerCity();
+            saveState = new SaveState();
 
-            currCity = new CurrentCity(n1);
+            currCity = saveState.getSavedCity();
 
             TextView welcome = (TextView) findViewById(R.id.welcome);
             welcome.setText("Welcome to " + currCity.name + "!");
@@ -58,10 +71,61 @@ public class RegionActivity extends AppCompatActivity {
 
     }
     public void toMarketPlace(View view) {
+        saveGame();
         Intent intent = new Intent(this, MarketPlaceActivity.class);
         startActivity(intent);
     }
     public static CurrentCity getCurrCity() {
         return currCity;
+    }
+
+    public void onSave(View view) {
+        CurrentCity saveCity = currCity;
+        Player savePlayer = ConfigurationActivity.getNewPlayer();
+        String jsonCity = gson.toJson(saveCity);
+        String jsonPlayer = gson.toJson(savePlayer);
+
+        File path = getApplicationContext().getFilesDir();
+        File fileCity = new File(path, "City.json");
+        File filePlayer = new File(path, "Player.json");
+        try {
+            FileOutputStream stream = new FileOutputStream(fileCity);
+            stream.write(jsonCity.getBytes());
+            stream.close();
+            FileOutputStream stream2 = new FileOutputStream(filePlayer);
+            stream2.write(jsonPlayer.getBytes());
+            stream2.close();
+            Toast.makeText(RegionActivity.this, "Saved Game!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(RegionActivity.this, "Error while saving Game.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void makePlayerCity() {
+        CurrentCity saveCity = currCity;
+        Player savePlayer = ConfigurationActivity.getNewPlayer();
+        String jsonCity = gson.toJson(saveCity);
+        String jsonPlayer = gson.toJson(savePlayer);
+
+        File path = getApplicationContext().getFilesDir();
+        File fileCity = new File(path, "City.json");
+        File filePlayer = new File(path, "Player.json");
+        try {
+            FileOutputStream stream = new FileOutputStream(fileCity);
+            stream.write(jsonCity.getBytes());
+            stream.close();
+            FileOutputStream stream2 = new FileOutputStream(filePlayer);
+            stream2.write(jsonPlayer.getBytes());
+            stream2.close();
+            Toast.makeText(RegionActivity.this, "Saved Game!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(RegionActivity.this, "Error while saving Game.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveGame() {
+        saveState.saveGame(ConfigurationActivity.getNewPlayer(), currCity);
     }
 }

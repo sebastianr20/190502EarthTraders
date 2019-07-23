@@ -21,12 +21,12 @@
         android:layout_marginTop="4dp"/>
 
     <EditText
-         android:id="@+id/input_name"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:inputType="textPersonName"
-         android:text="Name"
-         android:layout_marginTop="4dp"/>
+        android:id="@+id/input_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:layout_marginTop="4dp"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -35,34 +35,52 @@
         android:text="Allocate your skill points. (Must add up to 16 max)"
         android:layout_marginTop="4dp"/>
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilot:" />
+
     <EditText
         android:id="@+id/pilot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:text="Pilot"
         android:layout_marginTop="4dp"/>
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fighter:" />
     <EditText
         android:id="@+id/fighter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:text="Fighter"
         android:layout_marginTop="4dp"/>
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trader:" />
     <EditText
         android:id="@+id/trader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:text="Trader"
         android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Engineer:" />
     <EditText
         android:id="@+id/engineer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:text="Engineer"
         android:layout_marginTop="4dp"/>
 
     <TextView

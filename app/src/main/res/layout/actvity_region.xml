@@ -20,5 +20,13 @@
         android:layout_marginTop="40dp"
         android:onClick="toMarketPlace"/>
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="onSave"
+        android:text="Save Game" />
+
 
 </LinearLayout>

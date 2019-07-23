@@ -11,13 +11,15 @@ import android.widget.Toast;
 import com.example.spacetraders190502.Model.CurrentCity;
 import com.example.spacetraders190502.Model.Player;
 import com.example.spacetraders190502.R;
+import com.example.spacetraders190502.Model.SaveState;
 import com.example.spacetraders190502.Views.RegionActivity;
 
 public class MarketPlaceActivity extends AppCompatActivity {
-    public Player newPlayer = ConfigurationActivity.getNewPlayer();
+    public SaveState saveState = new SaveState();
+    public Player newPlayer = saveState.getSavedPlayer();
     private Button b;
     private TextView fuel;
-    CurrentCity currentCity = RegionActivity.getCurrCity();
+    CurrentCity currentCity = saveState.getSavedCity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class MarketPlaceActivity extends AppCompatActivity {
             newPlayer.getSpaceship().setFuelcapacity(100);
             newPlayer.getSpaceship().setFueldistance(50);
             update();
+            saveGame();
         } else {
             Toast.makeText(MarketPlaceActivity.this, "Not enough credits to refuel.", Toast.LENGTH_SHORT).show();
         }
@@ -59,5 +62,9 @@ public class MarketPlaceActivity extends AppCompatActivity {
     public void travel(View view) {
         Intent intent = new Intent(MarketPlaceActivity.this, TravelActivity.class);
         startActivity(intent);
+    }
+
+    private void saveGame() {
+        saveState.saveGame(newPlayer, currentCity);
     }
 }
